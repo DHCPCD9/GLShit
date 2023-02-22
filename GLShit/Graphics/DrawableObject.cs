@@ -1,4 +1,5 @@
-﻿using OpenTK.Windowing.Common;
+﻿using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 
 namespace GLShit.Graphics;
 
@@ -15,6 +16,8 @@ public abstract class DrawableObject : IDrawObject
     public float Opacity { get; set; } = 1;
     public Axis AutoSizeAxis { get; set; } = Axis.None;
     public int ZIndex { get; set; } = 0;
+    public Color4 Color { get; set; } = Color4.White;
+    public List<Transformation> Transformations { get; set; } = new();
     public float Width
     {
         get {
@@ -74,6 +77,12 @@ public abstract class DrawableObject : IDrawObject
         foreach (var child in Children)
         {
             child.Update();
+        }
+        
+        //Processing all transformations
+        foreach (var transformation in Transformations)
+        {
+            transformation.Update(this);
         }
     }
 

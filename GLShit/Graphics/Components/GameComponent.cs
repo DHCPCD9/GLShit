@@ -13,4 +13,14 @@ class GameComponent : DrawableObject {
 
         base.Load(@base);
     }
+    
+    public void Add(DrawableObject drawableObject)
+    {
+        // Ensuring there is parent is null
+        if (drawableObject.Parent != null) {
+            throw new GameComponentHasParentException("GameComponent cannot have parent");
+        }
+
+        Children.Add(drawableObject);
+    }
 }

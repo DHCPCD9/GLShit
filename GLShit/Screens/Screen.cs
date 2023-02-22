@@ -140,7 +140,8 @@ public class Screen : IScreen
         //Loading the entire object
         drawObject.Load(Game);
         
-        DrawObjects.Add(drawObject);
+        //Adding to the main components children
+        _gameComponent.Add(drawObject);
     }
 
     public void Draw()

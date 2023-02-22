@@ -80,7 +80,7 @@ public class Box : DrawableObject
 
         int vertexColorLocation = GL.GetUniformLocation(Shader.Handle, "ourColor");
         
-        GL.Uniform4(vertexColorLocation, Color.R, Color.G, Color.B, Color.A);
+        GL.Uniform4(vertexColorLocation, Color.R, Color.G, Color.B, Opacity);
         
         int vertexPosLocation = GL.GetUniformLocation(Shader.Handle, "uPos");
         var pos = new Vector3(Position.X, Position.Y, 0);
