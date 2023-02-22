@@ -8,7 +8,7 @@ using OpenTK.Mathematics;
 
 namespace GLShit.Graphics.Shapes;
 
-public class Box : BaseDrawObject
+public class Box : DrawableObject
 {
     private readonly Vector2[] _shape_vertices = new[]
     {
@@ -25,7 +25,7 @@ public class Box : BaseDrawObject
     public Vector Position { get; } = new();
     public float Rotation { get; set; } = 0f;
     public Color4 Color { get; set; } = Color4.White;
-    public Shader Shader { get; set; }
+    public Shader? Shader { get; set; }
 
     public Vector Size { get; set; } = new Vector
     {
@@ -74,6 +74,8 @@ public class Box : BaseDrawObject
 
     public override void Update()
     {
+        if (Shader is null) throw new ShaderIsNullException(nameof(Shader));
+
         Shader.Use();
 
         int vertexColorLocation = GL.GetUniformLocation(Shader.Handle, "ourColor");
@@ -98,15 +100,8 @@ public class Box : BaseDrawObject
             _vertices[i] = Vector2.Transform(_shape_vertices[i], Quaternion.FromAxisAngle(Vector3.UnitZ, Rotation));
         }
         
-        //Now transform the vertices to the correct size
-        //var scale = new Vector2(Size.X / GameBase.Size.X, Size.Y / GameBase.Size.Y);
-        //for (int i = 0; i < _vertices.Length; i++)
-        //{
-        //_vertices[i] = Vector2.Multiply(_shape_vertices[i], scale);
-        //}
-        
         Shader.UnUse();
-
+   
         GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
         GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * Vector3.SizeInBytes, _vertices, BufferUsageHint.StaticDraw);
         
@@ -121,6 +116,7 @@ public class Box : BaseDrawObject
 
     public override void Draw()
     {
+        if (Shader is null) throw new ShaderIsNullException(nameof(Shader));
         Shader.Use();
         GL.BindVertexArray(_vertexArrayObject);
         GL.DrawArrays(PrimitiveType.TriangleFan, 0, _vertices.Length);

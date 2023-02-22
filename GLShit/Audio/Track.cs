@@ -8,6 +8,32 @@ public class Track : IDisposable
     public int Handle { get; set; }
     
     public string Path { get; set; }
+    public double Volume
+    {
+        get => Bass.ChannelGetAttribute(Handle, ChannelAttribute.Volume);
+        set => Bass.ChannelSetAttribute(Handle, ChannelAttribute.Volume, value);
+    }
+
+    public double PlaybackSpeed
+    {
+        get => Bass.ChannelGetAttribute(Handle, ChannelAttribute.Frequency);
+        set => Bass.ChannelSetAttribute(Handle, ChannelAttribute.Frequency, value);
+    }
+
+    public double Position
+    {
+        get => Bass.ChannelBytes2Seconds(Handle, Bass.ChannelGetPosition(Handle));
+        set => Bass.ChannelSetPosition(Handle, Bass.ChannelSeconds2Bytes(Handle, value));
+    }
+    public double Length => Bass.ChannelBytes2Seconds(Handle, Bass.ChannelGetLength(Handle));
+    public bool IsPlaying => Bass.ChannelIsActive(Handle) == PlaybackState.Playing;
+
+    public double PlaybackPitch
+    {
+        get => Bass.ChannelGetAttribute(Handle, ChannelAttribute.Pitch);
+        set => Bass.ChannelSetAttribute(Handle, ChannelAttribute.Pitch, value);
+    }
+
     public Track(string path)
     {
         Path = path;
